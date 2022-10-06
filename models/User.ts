@@ -4,6 +4,7 @@ import Location from "./Location";
 import e from "express";
 
 export default class User {
+   private _id: string = '';
    private username: string = '';
    private password: string = '';
    private firstName: string | null = null;
@@ -18,12 +19,10 @@ export default class User {
    private joined: Date = new Date();
    private location: Location | null = null;
    
-   constructor(username: string, password: string, firstname: string, lastname: string, email: string){
+   constructor(id: string, username: string, password: string){
+      this._id = id;
       this.username = username;
       this.password = password;
-      this.firstName = firstname;
-      this.lastName = lastname;
-      this.email = email;
    }
    
 }
