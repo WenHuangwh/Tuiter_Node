@@ -40,7 +40,7 @@ app.use(express.json());
 app.use(cors());
 
 app.get('/', (req: Request, res: Response) =>
-    res.send('Welcome!'));
+    res.send('Welcome to Tuiter!'));
 // create RESTful Web service API
 const userController = UserController.getInstance(app);
 const tuitController = TuitController.getInstance(app);
