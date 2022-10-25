@@ -1,10 +1,13 @@
-import mongoose, {Schema} from "mongoose";
+/**
+ * @file Define mongoose schema in collection
+ */
+import mongoose, { Schema } from "mongoose";
 import Message from "../../models/messages/Message";
 
 const MessageSchema = new mongoose.Schema<Message>({
     message: String,
-    to: {type: Schema.Types.ObjectId, ref: "UserModel"},
-    from: {type: Schema.Types.ObjectId, ref: "UserModel"},
+    to: { type: Schema.Types.ObjectId, ref: "UserModel" },
+    from: { type: Schema.Types.ObjectId, ref: "UserModel" },
     sentOn: Date
-}, {collection: "messages"});
+}, { collection: "messages" });
 export default MessageSchema;

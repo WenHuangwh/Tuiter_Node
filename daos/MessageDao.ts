@@ -1,5 +1,5 @@
 /**
- * @file Implements DAO managing data storage of messages. Uses mongoose UserModel
+ * @file Implements DAO managing data storage of messages. Uses mongoose MessageModel
  * to integrate with MongoDB
  */
 
@@ -9,7 +9,7 @@ import Message from "../models/messages/Message";
 
 /**
  * @class MessageDao Implements Data Access Object managing data storage
- * of Messages
+ * of messages
  * @property {MessageDao} MessageDao Private single instance of MessageDao
  */
 export default class MessageDao implements MessageDaoI {
@@ -28,7 +28,10 @@ export default class MessageDao implements MessageDaoI {
 
     /**
      * Uses MessageMoel to create new message documents in message collection
-     * @returns New message
+     * @param {string} fromid User send message
+     * @param {string} toid User receive message
+     * @param {string} message Message content
+     * @returns New Message
      */
     sendMessage = async (fromid: string, toid: string, message: string): Promise<Message> =>
         MessageModel.create({ from: fromid, to: toid, message: message, sentOn: new Date })
@@ -43,6 +46,7 @@ export default class MessageDao implements MessageDaoI {
 
     /**
      * Use MessageModel to retrieve all message send by a user
+     * @param {string} uid User who sends message
      * @returns Message array
      */
     findAllMessageUserSend = async (uid: string): Promise<Message[]> =>
@@ -53,6 +57,7 @@ export default class MessageDao implements MessageDaoI {
 
     /**
      * Use MessageModel to retrieve all message a user receives
+     * @param {string} uid User who receives message
      * @returns Message array
      */
     findAllMessageUserReceive = async (uid: string): Promise<Message[]> =>
@@ -63,6 +68,8 @@ export default class MessageDao implements MessageDaoI {
 
     /**
      * Use MessageModel to retrieve all message send from one user and received by another user
+     * @param {string} fromid User who sends message
+     * @param {string} toid User who receives message
      * @returns Message array
      */
     findMessageBetweenTwoUsers = async (fromid: string, toid: string): Promise<Message[]> =>

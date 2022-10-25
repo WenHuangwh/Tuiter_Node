@@ -1,3 +1,6 @@
+/**
+ * @file Define mongoose schema in collection
+ */
 import mongoose, { Schema } from "mongoose";
 import Follow from "../../models/follows/Follow";
 
