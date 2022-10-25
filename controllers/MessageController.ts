@@ -57,10 +57,11 @@ export default class MessageController implements MessageControllerI {
     * body formatted as JSON containing the new message that was inserted in the
     * database
     */
-    sendMessage = (req: Request, res: Response) =>
+    sendMessage = (req: Request, res: Response) => {
+        console.log(req.body.message);
         MessageController.MessageDao.sendMessage(req.params.fromid, req.params.toid, req.body.message)
             .then(Messages => res.json(Messages));
-
+    }
 
     /**
      * @param {Request} req Represents request from client, including the
