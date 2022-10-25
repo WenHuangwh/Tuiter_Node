@@ -42,7 +42,7 @@ export default class MessageDao implements MessageDaoI {
      * @returns Promise To be notified when message is removed from the database
      */
     deleteMessage = async (mid: string): Promise<any> =>
-        MessageModel.remove({ _id: mid })
+        MessageModel.deleteOne({ _id: mid })
 
     /**
      * Use MessageModel to retrieve all message send by a user
