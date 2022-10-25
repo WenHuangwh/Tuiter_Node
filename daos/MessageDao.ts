@@ -53,6 +53,7 @@ export default class MessageDao implements MessageDaoI {
         MessageModel
             .find({ from: uid })
             .populate("to")
+            .populate("from")
             .exec()
 
     /**
@@ -63,6 +64,7 @@ export default class MessageDao implements MessageDaoI {
     findAllMessageUserReceive = async (uid: string): Promise<Message[]> =>
         MessageModel
             .find({ to: uid })
+            .populate("to")
             .populate("from")
             .exec()
 
