@@ -13,7 +13,7 @@ import MessageControllerI from "../interfaces/MessageControllerI";
  * <ul>
  *     <li>POST /api/users/:fromid/messages/:toid  to record that a user send message to another user
  *     </li>
- *     <li>DELETE /api/users/:fromid/messages/:toid  to delete a message
+ *     <li>DELETE /api/messages/:mid  to delete a message
  *     </li>
  *     <li>GET /api/messages/:uid  to retrieve all the messages send to a user
  *     </li>
