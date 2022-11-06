@@ -17,7 +17,7 @@ import MessageControllerI from "../interfaces/MessageControllerI";
  *     </li>
  *     <li>GET /api/messages/:uid  to retrieve all the messages send to a user
  *     </li>
- *     <li>GET /api/users/:fromid/messages  to retrieve all the messages send by a user
+ *     <li>GET /api/users/:uid/messages  to retrieve all the messages send by a user
  *     </li>
  *     <li>GET /api/users/:user1id/messages/:user2id  to retrieve all messages user1 sent to user2
  *     </li>
@@ -41,7 +41,7 @@ export default class MessageController implements MessageControllerI {
             app.post("/api/users/:fromid/messages/:toid", MessageController.MessageController.sendMessage);
             app.delete("/api/messages/:mid", MessageController.MessageController.deleteMessage);
             app.get("/api/messages/:uid", MessageController.MessageController.findAllMessageUserReceive);
-            app.get("/api/users/:fromid/messages", MessageController.MessageController.findAllMessageUserSend);
+            app.get("/api/users/:uid/messages", MessageController.MessageController.findAllMessageUserSend);
             app.get("/api/users/:user1id/messages/:user2id", MessageController.MessageController.findMessageUserSendToAnotherUser);
         }
         return MessageController.MessageController;
