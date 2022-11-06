@@ -53,11 +53,11 @@ export default class UserController implements UserControllerI {
             // for testing. Not RESTful
             app.get("/api/users/create",
                 UserController.userController.createUser);
-            app.delete("/api/users/id/:uid/delete",
+            app.get("/api/users/id/:uid/delete",
                 UserController.userController.deleteUser);
-            app.delete("/api/users/username/:username/delete",
+            app.get("/api/users/username/:username/delete",
                 UserController.userController.deleteUsersByUsername);
-            app.delete("/api/users/delete",
+            app.get("/api/users/delete",
                 UserController.userController.deleteAllUsers);
         }
         return UserController.userController;
