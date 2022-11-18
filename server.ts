@@ -21,7 +21,10 @@ import LikeController from "./controllers/LikeController";
 import FollowController from './controllers/FollowController';
 import BookmarkController from './controllers/BookmarkController';
 import MessageController from './controllers/MessageController';
+import AuthenticationController from "./controllers/auth-controller";
 import mongoose from "mongoose";
+const session = require("express-session");
+
 var cors = require('cors')
 require('dotenv').config();
 // build the connection string
@@ -36,8 +39,19 @@ const connectionString = `${PROTOCOL}://${DB_USERNAME}:${DB_PASSWORD}@${HOST}/${
 mongoose.connect(connectionString);
 
 const app = express();
-app.use(express.json());
+let sess = {
+    secret: process.env.SECRET,
+    cookie: {
+        secure: false
+    }
+}
+if (process.env.ENV === 'PRODUCTION') {
+    app.set('trust proxy', 1) // trust first proxy
+    sess.cookie.secure = true // serve secure cookies
+}
 app.use(cors());
+app.use(session(sess));
+app.use(express.json());
 
 app.get('/', (req: Request, res: Response) =>
     res.send('Welcome to Tuiter!'));
@@ -48,7 +62,7 @@ const likesController = LikeController.getInstance(app);
 const followController = FollowController.getInstance(app);
 const bookmarkController = BookmarkController.getInstance(app);
 const messageController = MessageController.getInstance(app);
-
+const authController = AuthenticationController.getInstance(app);
 
 /**
  * Start a server listening at port 4000 locally
