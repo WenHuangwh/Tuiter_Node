@@ -25,7 +25,6 @@ export default class AuthenticationController {
         const password = newUser.password;
         const hash = await bcrypt.hash(password, saltRounds);
         newUser.password = hash;
-
         const existingUser = await AuthenticationController.userDao
             .findUserByUsername(req.body.username);
         if (existingUser) {

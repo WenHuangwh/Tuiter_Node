@@ -37,10 +37,14 @@ const DB_QUERY = "retryWrites=true&w=majority";
 const connectionString = `${PROTOCOL}://${DB_USERNAME}:${DB_PASSWORD}@${HOST}/${DB_NAME}?${DB_QUERY}`;
 // connect to the database
 mongoose.connect(connectionString);
-
 const app = express();
+app.use(cors({
+    origin: true,
+    credentials: true,
+}));
+app.use(express.json());
 let sess = {
-    secret: process.env.SECRET,
+    secret: "secret",
     cookie: {
         secure: false
     }
@@ -49,9 +53,8 @@ if (process.env.ENV === 'PRODUCTION') {
     app.set('trust proxy', 1) // trust first proxy
     sess.cookie.secure = true // serve secure cookies
 }
-app.use(cors());
 app.use(session(sess));
-app.use(express.json());
+
 
 app.get('/', (req: Request, res: Response) =>
     res.send('Welcome to Tuiter!'));
