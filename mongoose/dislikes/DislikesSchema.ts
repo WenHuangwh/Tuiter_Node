@@ -2,7 +2,7 @@
  * @file Define mongoose schema in collection
  */
 import mongoose, { Schema } from "mongoose";
-import Dislike from "../../models/dislikes/dislike";
+import Dislike from "../../models/dislikes/Dislike";
 
 const DislikeSchema = new mongoose.Schema<Dislike>({
     tuit: { type: Schema.Types.ObjectId, ref: "TuitModel" },
