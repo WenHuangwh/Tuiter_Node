@@ -5,18 +5,21 @@ import { Express, Request, Response } from "express";
 import DislikeDao from "../daos/DislikeDao";
 import DislikeControllerI from "../interfaces/DislikeControllerI";
 import TuitDao from "../daos/TuitDao";
+import LikeDao from "../daos/LikeDao";
 /**
  * @class DislikeController Implements RESTful Web service API for Dislikes resource.
  * Defines the following HTTP endpoints:
  * <ul>
- *     <li>GET /api/users/:uid/Dislikes to retrieve all the tuits Disliked by a user
+ *     <li>GET /api/users/:uid/dislikes to retrieve all the tuits Disliked by a user
  *     </li>
- *     <li>GET /api/tuits/:tid/Dislikes to retrieve all users that Disliked a tuit
+ *     <li>GET /api/tuits/:tid/dislikes to retrieve all users that Disliked a tuit
  *     </li>
- *     <li>POST /api/users/:uid/Dislikes/:tid to record that a user Dislikes a tuit
+ *     <li>POST /api/users/:uid/dislikes/:tid to record that a user Dislikes a tuit
  *     </li>
- *     <li>DELETE /api/users/:uid/unDislikes/:tid to record that a user
+ *     <li>DELETE /api/users/:uid/undislikes/:tid to record that a user
  *     no londer Dislikes a tuit</li>
+ *     <li>PUT /api/users/:uid/dislikes/:tid to record that a user Dislikes a tuit
+ *     </li>
  * </ul>
  * @property {DislikeDao} DislikeDao Singleton DAO implementing Dislikes CRUD operations
  * @property {DislikeController} DislikeController Singleton controller implementing
@@ -25,6 +28,7 @@ import TuitDao from "../daos/TuitDao";
 export default class DislikeController implements DislikeControllerI {
     private static dislikeDao: DislikeDao = DislikeDao.getInstance();
     private static tuitDao: TuitDao = TuitDao.getInstance();
+    private static likeDao: LikeDao = LikeDao.getInstance();
     private static dislikeController: DislikeController | null = null;
     /**
      * Creates singleton controller instance
@@ -94,8 +98,8 @@ export default class DislikeController implements DislikeControllerI {
 
     /**
      * @param {Request} req Represents request from client, including the
-     * path parameters uid and tid representing the user that is unliking
-     * the tuit and the tuit being unDisliked
+     * path parameters uid and tid representing the user that is disliking
+     * the tuit and the tuit being disliked
      * @param {Response} res Represents response to client, including status
      * on whether deleting the Dislike was successful or not
      */
@@ -111,14 +115,23 @@ export default class DislikeController implements DislikeControllerI {
             const howManyDislikedTuit = await DislikeController.dislikeDao
                 .countHowManyDislikedTuit(tid);
             let tuit = await DislikeController.tuitDao.findTuitById(tid);
+            const userAlreadyLikedTuit = await DislikeController.likeDao
+                .findUserLikesTuit(userId, tid);
+            const howManyLikedTuit = await DislikeController.likeDao
+                .countHowManyLikedTuit(tid);
             if (userAlreadyDislikedTuit) {
                 await DislikeController.dislikeDao.userUnDislikesTuit(userId, tid);
                 tuit.stats.dislikes = howManyDislikedTuit - 1;
             } else {
+                // If user liked that tuit, unlike it.
+                if (userAlreadyLikedTuit) {
+                    await DislikeController.likeDao.userUnlikesTuit(userId, tid);
+                    tuit.stats.likes = howManyLikedTuit - 1;
+                }
                 await DislikeController.dislikeDao.userDislikesTuit(userId, tid);
                 tuit.stats.dislikes = howManyDislikedTuit + 1;
             };
-            await DislikeController.tuitDao.updateDislikes(tid, tuit.stats);
+            await DislikeController.tuitDao.updateLikes(tid, tuit.stats);
             res.sendStatus(200);
         } catch (e) {
             res.sendStatus(404);
