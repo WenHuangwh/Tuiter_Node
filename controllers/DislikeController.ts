@@ -92,6 +92,13 @@ export default class DislikeController implements DislikeControllerI {
         DislikeController.dislikeDao.userUnDislikesTuit(req.params.uid, req.params.tid)
             .then(status => res.send(status));
 
+    /**
+     * @param {Request} req Represents request from client, including the
+     * path parameters uid and tid representing the user that is unliking
+     * the tuit and the tuit being unDisliked
+     * @param {Response} res Represents response to client, including status
+     * on whether deleting the Dislike was successful or not
+     */
     userTogglesTuitDislikes = async (req: any, res: any) => {
         const uid = req.params.uid;
         const tid = req.params.tid;
@@ -106,10 +113,10 @@ export default class DislikeController implements DislikeControllerI {
             let tuit = await DislikeController.tuitDao.findTuitById(tid);
             if (userAlreadyDislikedTuit) {
                 await DislikeController.dislikeDao.userUnDislikesTuit(userId, tid);
-                tuit.stats.Dislikes = howManyDislikedTuit - 1;
+                tuit.stats.dislikes = howManyDislikedTuit - 1;
             } else {
                 await DislikeController.dislikeDao.userDislikesTuit(userId, tid);
-                tuit.stats.Dislikes = howManyDislikedTuit + 1;
+                tuit.stats.dislikes = howManyDislikedTuit + 1;
             };
             await DislikeController.tuitDao.updateDislikes(tid, tuit.stats);
             res.sendStatus(200);
