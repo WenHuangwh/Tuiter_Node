@@ -1,4 +1,4 @@
-import Dislike from "../models/dislikes/dislike";
+import Dislike from "../models/dislikes/Dislike";
 import User from "../models/users/User";
 
 /**
