@@ -44,15 +44,21 @@ app.use(cors({
     credentials: true,
 }));
 app.use(express.json());
+// Creates the session middleware.
 let sess = {
-    secret: "secret",
+    secret: process.env.SECRET,
     cookie: {
-        secure: false
+        secure: false,
+        resave: false,
+        saveUninitialized: false,
+        // Enables cross-site delivery between Netlify and Heroku.
+        sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax'
     }
 }
-if (process.env.ENV === 'PRODUCTION') {
-    app.set('trust proxy', 1) // trust first proxy
-    sess.cookie.secure = true // serve secure cookies
+// Using default env variable on Heroku
+if (process.env.NODE_ENV == 'production') {
+    app.set('trust proxy', 1)
+    sess.cookie.secure = true
 }
 app.use(session(sess));
 
